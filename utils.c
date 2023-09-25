@@ -6,9 +6,11 @@
 /*   By: fgomes-c <fgomes-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 15:07:48 by fgomes-c          #+#    #+#             */
-/*   Updated: 2023/09/22 16:53:23 by fgomes-c         ###   ########.fr       */
+/*   Updated: 2023/09/25 14:01:27 by fgomes-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "pipex.h"
 
 void	exit_error(char *str)
 {
@@ -23,13 +25,14 @@ void	custom_error(char *header, char *msg)
 	ft_putstr_fd(msg, 2);
 	ft_putstr_fd("\n", 2);
 }
-//a funcao free deve ser utilizada de dentro para fora em todos os niveis do array de arrays
+
+//a funcao free deve ser utilizada de dentro para fora em todos os niveis
 void	free_split(char **str)
 {
 	int	i;
-	
+
 	i = 0;
-	while(str[i])
+	while (str[i])
 		free(str[i++]); 
 	free(str);
 }
@@ -63,6 +66,7 @@ char	*find_path(char *cmd, char **envp)
 	return (NULL);
 }
 
+//(127)codigo usado p/ indicar q o comando n foi encontrado
 void	execute(char *av, char **envp)
 {
 	char	**cmd;
@@ -74,7 +78,7 @@ void	execute(char *av, char **envp)
 	{
 		free_split(cmd);
 		free(path);
-		exit(127); //codigo usado p/ indicar q o comando n foi encontrado
+		exit(127);
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
