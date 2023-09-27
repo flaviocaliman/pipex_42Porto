@@ -6,7 +6,7 @@
 #    By: fgomes-c <fgomes-c@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/09/25 14:14:05 by fgomes-c          #+#    #+#              #
-#    Updated: 2023/09/25 15:00:59 by fgomes-c         ###   ########.fr        #
+#    Updated: 2023/09/27 15:17:20 by fgomes-c         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ clean:
 		${RM} ${OBJS}
 
 fclean: clean
-		${make} ${LIBFT_PATH} fclean
+		${MAKE} ${LIBFT_PATH} fclean
 		${RM} ${PROG}
 
 re: fclean all

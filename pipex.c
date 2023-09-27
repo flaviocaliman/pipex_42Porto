@@ -6,7 +6,7 @@
 /*   By: fgomes-c <fgomes-c@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 17:00:00 by fgomes-c          #+#    #+#             */
-/*   Updated: 2023/09/25 14:56:45 by fgomes-c         ###   ########.fr       */
+/*   Updated: 2023/09/27 14:46:13 by fgomes-c         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,9 @@ int	main(int ac, char **av, char **envp)
 		parent_process(av, envp, fd);
 	}
 	else
-		exit_error("Error: bad arguments.");
+	{
+		ft_putstr_fd("Error: Bad arguments.\n", 2);
+		exit(1);
+	}
 	return (0);
 }
