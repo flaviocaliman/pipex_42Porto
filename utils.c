@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgomes-c <fgomes-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caliman <caliman@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/21 15:07:48 by fgomes-c          #+#    #+#             */
-/*   Updated: 2023/09/27 14:43:10 by fgomes-c         ###   ########.fr       */
+/*   Updated: 2023/10/09 20:17:01 by caliman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ char	*find_path(char *cmd, char **envp)
 		free (cmd_path);
 	}
 	free_split(envp_paths);
-	custom_error(cmd, "command not found");
+	custom_error(cmd, "Error: command not found");
 	return (NULL);
 }
 
@@ -72,18 +72,26 @@ void	execute(char *av, char **envp)
 	char	**cmd;
 	char	*path;
 
-	cmd = ft_split(av, ' ');
-	path = find_path(cmd[0], envp);
-	if (!path)
+	if (av[0])
 	{
-		free_split(cmd);
-		free(path);
-		exit(127);
+		cmd = ft_split(av, ' ');
+		path = find_path(cmd[0], envp);
+		if (!path)
+		{
+			free_split(cmd);
+			free(path);
+			exit(127);
+		}
+		if (execve(path, cmd, envp) == -1)
+		{
+			free_split(cmd);
+			free(path);
+			exit_error("Error: execve");
+		}
 	}
-	if (execve(path, cmd, envp) == -1)
+	else
 	{
-		free_split(cmd);
-		free(path);
-		exit_error("Error execute");
+		ft_putstr_fd("Error execute: Bad arguments.\n", 2);
+		exit(1);
 	}
 }

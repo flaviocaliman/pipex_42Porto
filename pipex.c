@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: fgomes-c <fgomes-c@student.42.fr>          +#+  +:+       +#+        */
+/*   By: caliman <caliman@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/09/18 17:00:00 by fgomes-c          #+#    #+#             */
-/*   Updated: 2023/09/27 14:46:13 by fgomes-c         ###   ########.fr       */
+/*   Updated: 2023/10/09 20:11:40 by caliman          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,20 +25,19 @@ void	check_envp(char **envp)
 	}
 	if (!check)
 	{
-		exit_error("Error check_envp");
+		exit_error("Error: check_envp");
 		exit(1);
 	}
 }
 
-//1o dup2: redireciona a saida padrao STDOUT para fd[1]
-//2o dup2: redireciona a entrada padrao STDIN para filein
+//dup2: redireciona as saidas e entradas
 void	child_process(char **av, char **envp, int *fd)
 {
 	int	filein;
 
 	filein = open(av[1], O_RDONLY, 0777);
 	if (filein == -1)
-		exit_error("Error filein");
+		exit_error("Error: open");
 	dup2(fd[1], STDOUT_FILENO);
 	dup2(filein, STDIN_FILENO);
 	close(fd[0]);
@@ -51,7 +50,7 @@ void	parent_process(char **av, char **envp, int *fd)
 
 	fileout = open(av[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fileout == -1)
-		exit_error("Error fileout");
+		exit_error("Error: fileout");
 	dup2(fd[0], STDIN_FILENO);
 	dup2(fileout, STDOUT_FILENO);
 	close(fd[1]);
@@ -68,18 +67,21 @@ int	main(int ac, char **av, char **envp)
 	if (ac == 5)
 	{
 		if (pipe(fd) == -1)
-			exit_error("Error pipe");
+			exit_error("Error: pipe(fd)");
 		child_pid = fork();
 		if (child_pid == -1)
-			exit_error("Error fork");
+			exit_error("Error: fork()");
 		if (child_pid == 0)
 			child_process(av, envp, fd);
-		waitpid(child_pid, NULL, 0);
-		parent_process(av, envp, fd);
+		else
+		{
+			waitpid(child_pid, NULL, 0);
+			parent_process(av, envp, fd);
+		}
 	}
 	else
 	{
-		ft_putstr_fd("Error: Bad arguments.\n", 2);
+		ft_putstr_fd("Error: ac != 5.\n", 2);
 		exit(1);
 	}
 	return (0);
